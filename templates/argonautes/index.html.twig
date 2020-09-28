@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Les argonautes' %}
+
+{% block body %}
+
+<!-- Header section -->
+<header>
+    <h1>
+      <img src="https://www.wildcodeschool.com/assets/logo_main-e4f3f744c8e717f1b7df3858dce55a86c63d4766d5d9a7f454250145f097c2fe.png" alt="Wild Code School logo" />
+      Les Argonautes
+    </h1>
+  </header>
+  
+  <!-- Main section -->
+  <main>
+    
+    <!-- New member form -->
+    {% if argonautes|length > 49 %}
+    <h2>L'équipage est au complet!</h2>
+    {% else %}
+    <h2>Ajouter un(e) Argonaute</h2>
+    <div class="new-member-form">
+        {{ form_start(form) }}
+        {{ form_errors(form.name) }}
+            <p>
+                {{ form_label(form.name, 'Nom de l\'Argonaute') }}
+                {{ form_widget(form.name, { 'attr': { 'placeholder': 'Charalampos' }}) }}
+                <button>Envoyer</button>
+            </p>
+        {{ form_end(form) }}
+    </div>
+    {% endif %}
+    <!-- Member list -->
+    <h2>Membres de l'équipage ({{ argonautes|length }}/50)</h2>
+    <section>
+        <table class="member-list">
+        {% set columns = 3 %}
+        {% for argonaute in argonautes %}
+            {% if loop.first or loop.index0 is divisible by(columns) %}
+                <tr>
+            {% endif %}
+            <td class="member-item">
+              {{ argonaute.name }}
+              <form action="{{ path('app.delete', {id: argonaute.id}) }}">
+                <button>x</button>
+              </form>
+            </td>
+            {% if loop.last or loop.index is divisible by(columns) %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    </section>
+  </main>
+  
+  <footer>
+    <p>Réalisé par Jason en Anthestérion de l'an 515 avant JC</p>
+  </footer>
+
+{% endblock %}
